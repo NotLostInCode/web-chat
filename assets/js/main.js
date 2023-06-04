@@ -14,21 +14,29 @@ function dataGeneration() {
     }
 }
 
-// Отправляем данные на сервер(backend)
+//
 sendMessageButton.addEventListener('click', dataGeneration)
 messageInput.addEventListener('keydown',(event) => event.code === "Enter" ?  dataGeneration() : '')
+//
+
+
+// Получаем id с сервера
+let currentUserId;
+
+socket.on('userId', (userId) => {
+    currentUserId = userId;
+  });
+//
 
 
 // Принимает данные с backend
 socket.on('chat message', (data) => {
+    console.log(currentUserId)
     const message = document.createElement("div");
 
     message.classList.add("message");
     message.textContent = data.message;
     wrapperMessage.appendChild(message);
 })
-
-
-
-
+//
 
