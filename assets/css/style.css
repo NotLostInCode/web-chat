@@ -13,7 +13,7 @@ body {
   width: 400px;
   background: url("./bg.png") 100% 100% / cover no-repeat;
 }
-.incoming-message {
+.wrapper-message {
   width: 400px;
   height: 500px;
   border: 1px solid #ccc;
@@ -38,21 +38,29 @@ body {
 }
 
 .message {
-  display: inline-block;
-  padding: 5px;
-  /* background: rgb(238,174,202); */
+  margin-bottom: 10px;
+  width: 100%;
+  text-align: right;
+}
+.message-text {
   background: radial-gradient(
     circle,
     rgba(238, 174, 202, 1) 0%,
     rgba(148, 187, 233, 1) 100%
   );
   border-radius: 10px;
-  width: 50px;
-  word-wrap: break-word;
-  margin-bottom: 10px;
-  width: 100%;
-  text-align: right;
+  padding: 10px;
+  display: inline-block;
+  word-break: break-all;
 }
 .other-message {
+  text-align: left;
+}
+
+.outgoing-message {
+  text-align: right;
+}
+
+.incoming-message {
   text-align: left;
 }

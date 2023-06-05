@@ -8,21 +8,21 @@
     <link rel="stylesheet" href="./reset.css" />
     <title>Web-chat</title>
   </head>
-  <body>
-
+  <body data-id="">
     <div class="wrapper">
-        <div class="container">
-            <div class="container-web-chat">
-              <div class="incoming-message">
-                <div class="message">Test</div>
-                <div class="other-message">Test</div>
-              </div>
-             <div class="message-container">
-                <input class="message-input" placeholder="Введите сообщение" type="text" />
-                <button class="message-send">Отправить</button>
-             </div>
-            </div>
+      <div class="container">
+        <div class="container-web-chat">
+          <div class="wrapper-message"></div>
+          <div class="message-container">
+            <input
+              class="message-input"
+              placeholder="Введите сообщение"
+              type="text"
+            />
+            <button class="message-send">Отправить</button>
           </div>
+        </div>
+      </div>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
