@@ -7,14 +7,51 @@ const app = express();
 const http = require("http").createServer(app);
 const io = require("socket.io")(http);
 
+
+// app.use(express.json()); // Включаем парсинг JSON
+
 app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/assets/authorization/authorization.html");
+});
+
+app.get("/index.html", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
+
 
 // Показываем по умолчанию, откуда нам брать статические файлы
 app.use(express.static(__dirname + "/assets/js"));
 app.use(express.static(__dirname + "/assets/css"));
 app.use(express.static(__dirname + "/assets/img"));
+app.use(express.static(__dirname + "/assets/authorization"));
+
+
+
+// autorization
+app.post('/index', (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+
+
+  console.log('Received data from client:');
+  console.log('Username:', username);
+  console.log('Password:', password);
+  // Здесь вы можете выполнить логику проверки учетных данных
+  // Например, сверить их с данными из вашей базы данных
+
+  // Отправка ответа об успешной авторизации или ошибке
+
+
+    io.emit('authorizationSuccess', {
+      username: username,
+      password: password
+    })
+
+    res.status(200).json({ url: '/index.html' });
+
+
+});
+
 
 io.on("connection", (socket) => {
   // Генерируем и отправляем id на клиентскую сторону
@@ -26,11 +63,11 @@ io.on("connection", (socket) => {
     // Обрабатываем сообщение и отправляем его на клиентскую сторону
     io.emit("chat message", {
       message: data.message,
-      sender: data.userId, // Используем переданный идентификатор пользователя
+      sender: data.sender, // Используем переданный идентификатор пользователя
     });
   });
 });
 
-http.listen(4000, () => {
+http.listen(3000, () => {
   console.log("Сервер стартанул");
 });

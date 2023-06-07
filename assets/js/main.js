@@ -6,14 +6,15 @@ const body = document.querySelector("body");
 
 // Объявляем глобальные переменные
 let currentUserId; // Идентификатор текущего пользователя
-let senderId; // Идентификатор отправителя сообщения
+let username;
+
 
 // Отправляем сообщение на сервер
 function dataGeneration() {
   if (messageInput.value) {
     socket.emit("chat message", {
       message: messageInput.value,
-      userId: currentUserId, // Передаем идентификатор пользователя
+      sender: currentUserId, // Передаем идентификатор пользователя
     });
     messageInput.value = "";
   }
@@ -23,21 +24,27 @@ function dataGeneration() {
 // Получаем идентификатор пользователя с сервера
 socket.on("userId", (userId) => {
   currentUserId = userId; // Сохраняем идентификатор пользователя
+  console.log(currentUserId);
 });
 //
+
+
 
 // Принимаем сообщения с сервера
 socket.on("chat message", (data) => {
   body.dataset.id = currentUserId; // Присваиваем идентификатор пользователя атрибуту `data-id` в теге body
-  // console.log(body.dataset.id);
 
   const message = document.createElement("div");
   message.classList.add("message");
+
+  const name = document.createElement('div')
+  name.textContent = username
+
   const messageText = document.createElement("p");
   messageText.classList.add("message-text");
+
   messageText.textContent = data.message;
 
-  senderId = data.sender; // Сохраняем идентификатор отправителя
 
   if (data.sender === currentUserId) {
     message.classList.add("outgoing-message");
@@ -46,9 +53,15 @@ socket.on("chat message", (data) => {
   }
 
   wrapperMessage.appendChild(message);
+  message.appendChild(name)
   message.appendChild(messageText);
 });
 //
+
+socket.on("authorizationSuccess", (data) => {
+   username = data.username
+
+});
 
 //
 sendMessageButton.addEventListener("click", dataGeneration);

@@ -1,0 +1,21 @@
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+}
+
+.form {
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+.login {
+}
+.passwords {
+}
+.from-btn {
+}
