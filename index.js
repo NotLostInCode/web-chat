@@ -1,5 +1,5 @@
 const express = require("express");
-
+const session = require('express-session');
 //Подключаем библиотеку для генерации id
 const { v4: uuidv4 } = require("uuid");
 
@@ -8,7 +8,7 @@ const http = require("http").createServer(app);
 const io = require("socket.io")(http);
 
 
-// app.use(express.json()); // Включаем парсинг JSON
+app.use(express.json()); // Включаем парсинг JSON
 
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/assets/authorization/authorization.html");
@@ -25,32 +25,28 @@ app.use(express.static(__dirname + "/assets/css"));
 app.use(express.static(__dirname + "/assets/img"));
 app.use(express.static(__dirname + "/assets/authorization"));
 
-
+app.use(session({
+  secret: 'your-secret-key',
+  resave: false,
+  saveUninitialized: true
+}));
 
 // autorization
 app.post('/index', (req, res) => {
-  const username = req.body.username;
-  const password = req.body.password;
+  const { username } = req.body;
+  req.session.username = username; // Сохраняем имя пользователя в сессии
 
+  // console.log('Username:', username);
 
-  console.log('Received data from client:');
-  console.log('Username:', username);
-  console.log('Password:', password);
-  // Здесь вы можете выполнить логику проверки учетных данных
-  // Например, сверить их с данными из вашей базы данных
-
-  // Отправка ответа об успешной авторизации или ошибке
-
-
-    io.emit('authorizationSuccess', {
-      username: username,
-      password: password
-    })
-
-    res.status(200).json({ url: '/index.html' });
-
-
+  res.status(200).json({url: '/index.html' }); // Возвращаем JSON-ответ с именем пользователя
 });
+
+// Получение имени пользователя из сессии
+app.get('/index', (req, res) => {
+  const username = req.session.username;
+  res.status(200).json({ username: username });
+});
+
 
 
 io.on("connection", (socket) => {

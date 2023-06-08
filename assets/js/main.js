@@ -1,3 +1,5 @@
+// const { response } = require("express");
+
 const socket = io();
 const sendMessageButton = document.querySelector(".message-send");
 const wrapperMessage = document.querySelector(".wrapper-message");
@@ -25,6 +27,14 @@ function dataGeneration() {
 socket.on("userId", (userId) => {
   currentUserId = userId; // Сохраняем идентификатор пользователя
   console.log(currentUserId);
+
+
+  fetch('/index')
+  .then(response => response.json())
+  .then(data => {
+     username = data.username;
+    console.log(username);
+  });
 });
 //
 
@@ -58,10 +68,10 @@ socket.on("chat message", (data) => {
 });
 //
 
-socket.on("authorizationSuccess", (data) => {
-   username = data.username
+// socket.on("authorizationSuccess", (data) => {
+//    username = data.username
 
-});
+// });
 
 //
 sendMessageButton.addEventListener("click", dataGeneration);
